@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turmas</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li form, li a {
+            margin-left: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Turmas Disponíveis</h1>
+    <ul>
+        {% for turma in turmas.items %}
+            <li>
+                {{ turma.name }} 
+                <div>
+                    <form action="{{ url_for('favoritar_turma', turma_id=turma.id) }}" method="POST">
+                        <button type="submit">Favoritar</button>
+                    </form>
+                    <a href="{{ url_for('turma_page', nome=turma.name) }}">Ver Materiais</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Turmas Favoritas</h2>
+    <a href="{{ url_for('favoritas_page') }}">Ver Favoritas</a>
+
+    <div class="pagination">
+        {% if turmas.has_prev %}
+            <a href="{{ url_for('aluno_page', page=turmas.prev_num) }}">Anterior</a>
+        {% endif %}
+        {% if turmas.has_next %}
+            <a href="{{ url_for('aluno_page', page=turmas.next_num) }}">Próximo</a>
+        {% endif %}
+    </div>
+</body>
+</html>

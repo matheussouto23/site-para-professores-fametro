@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Mensagens</title>
+</head>
+<body>
+    <h1>Enviar Mensagem</h1>
+    <form action="{{ url_for('mensagens.mensagens') }}" method="POST">
+        <label for="remetente">Remetente:</label>
+        <input type="text" name="remetente" required>
+        <label for="destinatario">Destinatário:</label>
+        <input type="text" name="destinatario" required>
+        <label for="conteudo">Conteúdo:</label>
+        <textarea name="conteudo" required></textarea>
+        <button type="submit">Enviar Mensagem</button>
+    </form>
+</body>
+</html>

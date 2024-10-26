@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Turmas ou Materiais</title>
+</head>
+<body>
+    <h1>Buscar</h1>
+    <form action="{{ url_for('busca.busca') }}" method="GET">
+        <input type="text" name="termo" placeholder="Buscar...">
+        <button type="submit">Buscar</button>
+    </form>
+    <ul>
+        {% for resultado in resultados %}
+            <li>{{ resultado }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

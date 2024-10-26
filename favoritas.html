@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turmas Favoritas</title>
+</head>
+<body>
+    <h1>Turmas Favoritas</h1>
+    <ul>
+        {% for turma in turmas.items %}
+            <li>{{ turma.name }} 
+                <a href="{{ url_for('turma_page', nome=turma.name) }}">Ver Materiais</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div>
+        {% if turmas.has_prev %}
+            <a href="{{ url_for('favoritas_page', page=turmas.prev_num) }}">Anterior</a>
+        {% endif %}
+        {% if turmas.has_next %}
+            <a href="{{ url_for('favoritas_page', page=turmas.next_num) }}">Próximo</a>
+        {% endif %}
+    </div>
+</body>
+</html>

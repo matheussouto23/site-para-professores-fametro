@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página do Professor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Página do Professor</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Início</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Minhas Turmas</h2>
+        <form method="POST">
+            <input type="text" name="class_name" placeholder="Nome da nova turma" required>
+            <button type="submit">Criar Turma</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <ul>
+            {% for turma in turmas.items %}
+                <li>
+                    <a href="{{ url_for('turma_page', nome=turma.name) }}">{{ turma.name }}</a>
+                    <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="turma" value="{{ turma.id }}">
+                        <input type="file" name="file" required>
+                        <select name="tipo">
+                            <option value="PDF">PDF</option>
+                            <option value="Vídeo">Vídeo</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                        <button type="submit">Enviar Material</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if turmas.has_prev %}
+            <a href="{{ url_for('professor_page', page=turmas.prev_num) }}">« Anterior</a>
+        {% endif %}
+        {% if turmas.has_next %}
+            <a href="{{ url_for('professor_page', page=turmas.next_num) }}">Próximo »</a>
+        {% endif %}
+    </main>
+</body>
+</html>

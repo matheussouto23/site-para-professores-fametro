@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cursos</title>
+</head>
+<body>
+    <h1>Lista de Cursos</h1>
+    {% for course in courses.items %}
+        <div>{{ course.name }}</div>
+    {% endfor %}
+
+    <div>
+        {% if courses.has_prev %}
+            <a href="{{ url_for('list_courses', page=courses.prev_num) }}">Anterior</a>
+        {% endif %}
+        
+        <span>Página {{ courses.page }} de {{ courses.pages }}</span>
+
+        {% if courses.has_next %}
+            <a href="{{ url_for('list_courses', page=courses.next_num) }}">Próximo</a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor {{ professor.name }}</title>
+</head>
+<body>
+    <h1>Professor: {{ professor.name }}</h1>
+
+    <h2>Turmas Criadas</h2>
+    <ul>
+        {% for turma in turmas %}
+            <li>
+                <strong>{{ turma.name }}</strong>
+                <ul>
+                    {% for material in turma.materials %}
+                        <li>{{ material.filename }} - <a href="{{ url_for('static', filename='uploads/' + material.filename) }}" download>Baixar</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('aluno_page') }}">Voltar para a Área do Aluno</a>
+</body>
+</html>

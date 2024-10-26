@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turmas de {{ professor.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main>
+        <h1>Turmas de {{ professor.name }}</h1>
+
+        <ul>
+            {% for turma in turmas %}
+            <li>
+                {{ turma.name }}
+                <a href="{{ url_for('turma_page', turma_id=turma.id) }}">Ver Materiais</a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <a href="{{ url_for('aluno_page') }}">Voltar para Professores</a>
+    </main>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Pesquisa</title>
+</head>
+<body>
+    <h1>Resultados da Pesquisa</h1>
+
+    <form action="{{ url_for('search_courses') }}" method="get">
+        <input type="text" name="query" placeholder="Buscar curso...">
+        <input type="text" name="teacher" placeholder="Nome do professor">
+        <select name="material_type">
+            <option value="">Selecione o tipo de material</option>
+            <option value="video">Vídeo</option>
+            <option value="document">Documento</option>
+            <!-- Adicione mais tipos conforme necessário -->
+        </select>
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div>
+        {% for course in results %}
+            <div>{{ course.name }}</div>
+        {% endfor %}
+    </div>
+</body>
+</html>
