@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turmas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 20px;
         }
         h1, h2 {
-            text-align: center;
             color: #333;
             margin-bottom: 20px;
         }
@@ -30,9 +29,6 @@
             justify-content: space-between;
             align-items: center;
         }
-        li form, li a {
-            margin-left: 10px;
-        }
         button {
             padding: 8px 15px;
             background-color: #007bff;
@@ -44,13 +40,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
         .pagination {
             text-align: center;
             margin-top: 20px;
@@ -58,39 +47,48 @@
         .pagination a {
             margin: 0 10px;
             color: #007bff;
-            text-decoration: none;
-        }
-        .pagination a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Turmas Disponíveis</h1>
-    <ul>
-        {% for turma in turmas.items %}
-            <li>
-                {{ turma.name }} 
-                <div>
-                    <form action="{{ url_for('favoritar_turma', turma_id=turma.id) }}" method="POST">
-                        <button type="submit">Favoritar</button>
-                    </form>
-                    <a href="{{ url_for('turma_page', nome=turma.name) }}">Ver Materiais</a>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-    
-    <h2>Turmas Favoritas</h2>
-    <a href="{{ url_for('favoritas_page') }}">Ver Favoritas</a>
+    <div class="container">
+        <h1 class="text-center">Turmas Disponíveis</h1>
 
-    <div class="pagination">
-        {% if turmas.has_prev %}
-            <a href="{{ url_for('aluno_page', page=turmas.prev_num) }}">Anterior</a>
-        {% endif %}
-        {% if turmas.has_next %}
-            <a href="{{ url_for('aluno_page', page=turmas.next_num) }}">Próximo</a>
-        {% endif %}
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-info" role="alert">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <ul>
+            {% for turma in turmas.items %}
+                <li>
+                    {{ turma.name }} 
+                    <div>
+                        <form action="{{ url_for('favoritar_turma', turma_id=turma.id) }}" method="POST" style="display:inline;">
+                            <button type="submit">Favoritar</button>
+                        </form>
+                        <a href="{{ url_for('turma_page', nome=turma.name) }}" class="btn btn-link">Ver Materiais</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Turmas Favoritas</h2>
+        <a href="{{ url_for('favoritas_page') }}" class="btn btn-info">Ver Favoritas</a>
+
+        <div class="pagination">
+            {% if turmas.has_prev %}
+                <a href="{{ url_for('aluno_page', page=turmas.prev_num) }}" class="btn btn-secondary">Anterior</a>
+            {% endif %}
+            {% if turmas.has_next %}
+                <a href="{{ url_for('aluno_page', page=turmas.next_num) }}" class="btn btn-secondary">Próximo</a>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
