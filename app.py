@@ -5,6 +5,7 @@ import os
 import bcrypt
 from sqlalchemy import inspect
 
+# Configurações do Flask
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///school.db'
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
@@ -49,7 +50,7 @@ class Material(db.Model):
     tipo = db.Column(db.String(50))  # Tipo de material (PDF, Vídeo, Outro)
     turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 
-# Funções adicionais
+# Importações de funções adicionais
 from editor_materiais import editar_material  # Importa a função de editar materiais
 from mensagens import enviar_mensagem          # Importa a função de enviar mensagens
 from busca import buscar_turmas                # Importa a função de buscar turmas
@@ -226,52 +227,35 @@ def turma_page(nome):
 @login_required
 def editar_material_route(id):
     material = Material.query.get(id)
-    if not material:
+    if material:
+        # Verifica se o arquivo foi enviado
+        file = request.files.get('file')
+        if file:
+            filename = file.filename
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            material.filename = filename
+        # Atualiza o tipo do material
+        material.tipo = request.form.get('tipo', material.tipo)
+        db.session.commit()
+        flash('Material editado com sucesso!', 'success')
+    else:
         flash('Material não encontrado.', 'error')
-        return redirect(url_for('professor_page'))
     
-    # Chamar função para editar o material
-    novo_nome = request.form.get('novo_nome')
-    tipo = request.form.get('tipo')
-    
-    editar_material(material, novo_nome, tipo)
-    db.session.commit()
-    
-    flash('Material editado com sucesso!', 'success')
     return redirect(url_for('professor_page'))
 
-# Rota para enviar mensagem
-@app.route('/enviar_mensagem', methods=['POST'])
-@login_required
-def enviar_mensagem_route():
-    destinatario = request.form.get('destinatario')
-    mensagem = request.form.get('mensagem')
-    
-    enviar_mensagem(destinatario, mensagem)
-    
-    flash('Mensagem enviada com sucesso!', 'success')
-    return redirect(url_for('professor_page'))
-
-# Rota para buscar turmas
-@app.route('/buscar_turmas', methods=['GET'])
-@login_required
-def buscar_turmas_route():
-    nome_turma = request.args.get('nome_turma')
-    
-    turmas_encontradas = buscar_turmas(nome_turma)
-    
-    return render_template('turmas_encontradas.html', turmas=turmas_encontradas)
-
-# Rota de logout
+# Rota para logout
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
+    flash('Você foi desconectado.', 'success')
     return redirect(url_for('index'))
 
+# Função para carregar o usuário
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    db.create_all()  # Cria o banco de dados se não existir
+    app.run(debug=True)  # Execute o aplicativo em modo de depuração
